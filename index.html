@@ -536,6 +536,7 @@
       <a href="#b2"><span>2</span> Viết 4 module</a>
       <a href="#b3"><span>3</span> Calibrate</a>
       <a href="#b4"><span>4</span> Chạy pipeline</a>
+      <a href="#cvat"><span>+</span> CVAT (thưởng)</a>
       <a href="#b5"><span>5</span> Báo cáo &amp; nộp</a>
       <a href="#loi"><span>!</span> Lỗi hay gặp</a>
     </nav>
@@ -551,6 +552,7 @@
           <option value="#b2">2 · Viết 4 module</option>
           <option value="#b3">3 · Calibrate</option>
           <option value="#b4">4 · Chạy pipeline</option>
+          <option value="#cvat">+ · CVAT (thưởng +2)</option>
           <option value="#b5">5 · Báo cáo &amp; nộp</option>
           <option value="#loi">Lỗi hay gặp</option>
         </select>
@@ -620,6 +622,7 @@
             <tr><td>2</td><td>Viết 4 module (TDD)</td><td><code>pytest</code> xanh hết</td></tr>
             <tr><td>3</td><td>Calibrate 2 ngưỡng</td><td>có <code>calibration/</code> + yaml đã đổi</td></tr>
             <tr><td>4</td><td>Chạy pipeline (+ Colab tùy chọn)</td><td>đủ <code>reports/</code> + <code>export/</code></td></tr>
+            <tr><td>+</td><td>CVAT lọc box nhỏ (thưởng +2, tùy chọn)</td><td>lọc <code>width &lt; 20</code> + ghi REPORT mục 6</td></tr>
             <tr><td>5</td><td>Viết REPORT + nộp</td><td><code>check-core</code> hết LỖI</td></tr>
           </tbody>
         </table>
@@ -784,8 +787,9 @@
               <li><code>data/raw/</code> có <strong>224 ảnh</strong> — đó là cả lô; <strong>không</strong> cần vẽ hết.</li>
               <li>Đề bảo mở khoảng <strong>~10 ảnh</strong> đã vẽ nhãn (<code>GUIDE.md</code>).</li>
               <li>Bạn chỉ vẽ đúng những tên ghi sau lệnh; mỗi tên → 1 file <code>.png</code>.</li>
-              <li><strong>Xuất ra:</strong> thư mục <code>work/viz/</code> (không phải <code>submission/</code>).</li>
+              <li><strong>Xuất ra:</strong> thư mục <code>work/viz/</code> (file <code>.png</code> xem local — <strong>không phải CVAT</strong>).</li>
               <li>Mục đích: nhìn lỗi bằng mắt, ghi <strong>3 lỗi</strong> vào nháp → dùng cho <code>REPORT.md</code> mục 4. Chưa phải xuất dataset sạch.</li>
+              <li><strong>CVAT</strong> là bước thưởng riêng (+2), làm <em>sau</em> khi chạy pipeline — xem mục <a href="#cvat">CVAT</a>.</li>
             </ul>
           </div>
         </div>
@@ -1016,9 +1020,10 @@ second_opinion:
           <div>
             <strong>Đừng nhầm thư mục xuất</strong>
             <ul style="margin:8px 0 0;padding-left:1.2rem">
-              <li><code>work/viz/</code> = ảnh vẽ nhãn để nhìn (Bước 1) — không nộp</li>
+              <li><code>work/viz/</code> = ảnh PNG vẽ nhãn để nhìn (Bước 1) — không nộp, <strong>không phải CVAT</strong></li>
               <li><code>submission/reports/</code> = báo cáo lỗi sau <code>pipeline.run</code></li>
               <li><code>submission/export/clean_v1/</code> = dataset sạch (Release/Hold). Rework thì thường <strong>không</strong> xuất</li>
+              <li><code>work/cvat_yolo11.zip</code> = zip nhãn YOLO 1.1 để <strong>import vào CVAT</strong> (mục thưởng)</li>
             </ul>
           </div>
         </div>
@@ -1073,6 +1078,128 @@ second_opinion:
           <li>Điền <code>REPO_URL</code> → Run all</li>
           <li>Tải <code>results/</code> về → <code>python scripts/summarize_results.py</code></li>
         </ol>
+      </section>
+
+      <!-- CVAT OPTIONAL -->
+      <section class="step" id="cvat">
+        <div class="step-head">
+          <div class="step-num warn">+</div>
+          <div>
+            <h2>CVAT — lọc box nhỏ (TÙY CHỌN, thưởng +2)</h2>
+            <div class="meta">~20 phút · chỉ làm SAU khi pipeline.run xong · không bắt buộc</div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="icon">!</div>
+          <div>
+            <strong>Đừng nhầm 3 thứ khác nhau</strong>
+            <table style="margin:10px 0 0;width:100%">
+              <thead><tr><th>Việc</th><th>Công cụ</th><th>Ra đâu</th><th>Khi nào</th></tr></thead>
+              <tbody>
+                <tr><td>Nhìn nhãn local</td><td><code>viz_labels.py</code></td><td><code>work/viz/*.png</code></td><td>Bước 1</td></tr>
+                <tr><td>Pipeline tự động</td><td><code>pipeline.run</code></td><td><code>submission/reports/</code> + <code>export/</code></td><td>Bước 4</td></tr>
+                <tr><td>Sửa/lọc tay trên web</td><td><strong>CVAT</strong></td><td>trên app.app.cvat.ai (rồi export YOLO)</td><td>Thưởng, sau Bước 4</td></tr>
+              </tbody>
+            </table>
+            <p style="margin:8px 0 0"><code>viz_labels</code> <strong>không</strong> đẩy gì lên CVAT. CVAT cần bạn tạo project + import ảnh/nhãn.</p>
+          </div>
+        </div>
+
+        <p>Theo <code>docs/CVAT_FILTER.md</code> + <code>RUBRIC.md</code>: pipeline quét cả lô; CVAT để <strong>xem và sửa tay</strong> vài ca (lọc box nhỏ).</p>
+
+        <h3>Điều kiện trước khi làm CVAT</h3>
+        <ol>
+          <li>Đã viết xong 4 module và <code>pytest</code> xanh</li>
+          <li>Đã chạy <code>python -m pipeline.run</code> thành công</li>
+          <li>Có sẵn:
+            <ul>
+              <li><code>work/run/ds/images/</code> + <code>labels/</code> (bản sao đang QC)</li>
+              <li><code>submission/reports/05_review_queue.csv</code> (hàng đợi ưu tiên)</li>
+              <li><code>cvat/labels.json</code> (nhãn car/person/truck/bus + thuộc tính <code>can_review</code>)</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Bước C1 — Đóng gói ~20 ảnh đầu hàng đợi (YOLO 1.1)</h3>
+        <p>CVAT import nhãn dạng <strong>YOLO 1.1</strong>: zip gồm <code>obj.data</code>, <code>obj.names</code>, <code>train.txt</code>, <code>obj_train_data/*.txt</code> (+ ảnh). Đề lấy ~20 ảnh từ đầu <code>05_review_queue.csv</code>.</p>
+        <div class="terminal">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">mọi OS</span></div>
+          <pre><code><span class="cmd">python scripts/pack_cvat_yolo.py --top 20 --out work/cvat_yolo11.zip</span>
+đã đóng 20 ảnh → work/cvat_yolo11.zip</code></pre>
+        </div>
+        <p>File ra: <code>work/cvat_yolo11.zip</code>. Bên trong giống:</p>
+        <pre><code>cvat_yolo11.zip
+├── obj.data
+├── obj.names          # car / person / truck / bus
+├── train.txt
+└── obj_train_data/
+    ├── img_xxxx.jpg
+    └── img_xxxx.txt</code></pre>
+
+        <h3>Bước C2 — Tạo project trên CVAT</h3>
+        <ol>
+          <li>Vào <a href="https://app.cvat.ai" target="_blank" rel="noopener">app.cvat.ai</a> (đăng ký/đăng nhập miễn phí) hoặc CVAT lớp cung cấp</li>
+          <li><strong>Projects → +</strong> → đặt tên (vd. <code>Day09-raw-QC</code>)</li>
+          <li>Phần Labels: chọn chế độ <strong>Raw / Constructor</strong> → dán nội dung file <code>cvat/labels.json</code> trong repo (đúng 4 lớp + checkbox <code>can_review</code>)</li>
+          <li>Save project</li>
+        </ol>
+        <pre><code>// cvat/labels.json — 4 lớp đúng thứ tự id 0..3
+car, person, truck, bus
+mỗi lớp có attribute: can_review (checkbox, mặc định false)</code></pre>
+
+        <h3>Bước C3 — Tạo task + đưa ảnh/nhãn vào</h3>
+        <p><strong>Cách A (đúng đề):</strong> task từ ảnh trong <code>work/run/ds/images/</code> (chọn ~20 stem trùng hàng đợi), rồi upload annotations.</p>
+        <ol>
+          <li>Trong project: <strong>Create new task</strong></li>
+          <li>Name: vd. <code>review-top20</code></li>
+          <li>Select files: chọn ~20 ảnh tương ứng (hoặc upload cả thư mục ảnh đã lọc). Có thể copy 20 ảnh ra <code>work/cvat_images/</code> cho dễ</li>
+          <li>Submit → mở task → <strong>Actions → Upload annotations → YOLO 1.1</strong> → chọn <code>work/cvat_yolo11.zip</code></li>
+          <li>Đợi import xong, mở Job để thấy box đã nằm trên ảnh</li>
+        </ol>
+        <p><strong>Cách B:</strong> một số bản CVAT cho <em>Import dataset</em> YOLO 1.1 trực tiếp từ zip đã có ảnh trong <code>obj_train_data/</code> (zip do script tạo đã kèm ảnh).</p>
+
+        <h3>Bước C4 — Lọc box nhỏ trong CVAT</h3>
+        <ol>
+          <li>Mở Job → panel <strong>Filters</strong> → <em>Add rule</em></li>
+          <li>Lọc box nhỏ (theo slide / đề thưởng):
+            <ul>
+              <li><code>width &lt; 20</code> hoặc <code>height &lt; 20</code></li>
+            </ul>
+          </li>
+          <li>Lọc khác (thử thêm):
+            <ul>
+              <li><code>label == "truck"</code></li>
+              <li><code>attr["can_review"] == true</code></li>
+            </ul>
+          </li>
+          <li>Duyệt: phím <kbd>→</kbd> / <kbd>←</kbd> (ảnh khớp lọc), <kbd>Tab</kbd> (object), <kbd>Del</kbd> (xoá 1 box)</li>
+          <li><strong>Trước khi xoá hàng loạt</strong> (<kbd>Ctrl</kbd>+<kbd>E</kbd> → Remove filtered shapes): đếm số box khớp → <kbd>Ctrl</kbd>+<kbd>S</kbd> lưu → chắc lọc đúng</li>
+        </ol>
+
+        <h3>Bước C5 — Đối chiếu với pipeline + ghi REPORT</h3>
+        <ol>
+          <li>Trong reports, tìm dòng mã <code>BOX_TINY</code> (pipeline dùng ngưỡng <code>min_box_px: 12</code>)</li>
+          <li>CVAT lọc <code>width &lt; 20</code> (theo slide) — <strong>khác ngưỡng</strong> → số box có thể không trùng</li>
+          <li>Export YOLO 1.1 từ CVAT (nếu muốn so nhãn đã sửa)</li>
+          <li>Ghi vào <code>submission/REPORT.md</code> mục 6 (phần thưởng):
+            <ul>
+              <li>Tên ảnh khớp lọc</li>
+              <li>Số box khớp</li>
+              <li>Cùng ảnh với <code>BOX_TINY</code> của pipeline không? 12 px vs 20 px</li>
+              <li>1 câu: <code>can_review</code> dùng khi nào; pipeline dùng thông tin tương tự ở đâu (hàng đợi / trọng số review)</li>
+            </ul>
+          </li>
+          <li>Làm kỹ: ≥ 5 ảnh + ảnh chụp màn hình bộ lọc (vẫn trong mức +2)</li>
+        </ol>
+
+        <div class="callout">
+          <div class="icon">✓</div>
+          <div>
+            <strong>Thưởng tối thiểu (+2)</strong>
+            Làm C2–C4 với ≥ 1 ảnh, lọc <code>width &lt; 20</code>, ghi REPORT mục 6. Không làm CVAT vẫn nộp bình thường (tối đa không có +2 này).
+          </div>
+        </div>
       </section>
 
       <!-- STEP 5 -->
