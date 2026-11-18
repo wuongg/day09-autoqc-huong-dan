@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day 09 Lab — Hướng dẫn làm bài (hình thật)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0b1f3a;
+      --ink-soft: #243652;
+      --paper: #f3f6f4;
+      --card: #ffffff;
+      --teal: #12b3a8;
+      --teal-deep: #0a7f78;
+      --orange: #ff8a3d;
+      --warn: #c45c26;
+      --ok: #2fbf71;
+      --bad: #d64545;
+      --line: #d5dde6;
+      --code-bg: #0f1724;
+      --shadow: 0 18px 40px rgba(11, 31, 58, 0.08);
+      --radius: 14px;
+      --max: 920px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(18, 179, 168, 0.16), transparent 60%),
+        radial-gradient(900px 400px at 100% 0%, rgba(255, 138, 61, 0.12), transparent 55%),
+        linear-gradient(180deg, #eef3f1 0%, var(--paper) 28%, #e8eef2 100%);
+      line-height: 1.55;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    a { color: var(--teal-deep); }
+    img { max-width: 100%; height: auto; display: block; }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: calc(var(--max) + 280px);
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+    }
+
+    nav.toc {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 14px;
+      box-shadow: var(--shadow);
+    }
+    nav.toc h2 {
+      margin: 0 0 10px;
+      font-family: Syne, sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    nav.toc a {
+      display: block;
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      padding: 7px 10px;
+      border-radius: 8px;
+      margin-bottom: 2px;
+    }
+    nav.toc a:hover,
+    nav.toc a.active {
+      background: rgba(18, 179, 168, 0.12);
+      color: var(--ink);
+    }
+    nav.toc a span {
+      display: inline-block;
+      width: 1.4rem;
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--teal-deep);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    main { min-width: 0; }
+
+    .hero {
+      background: var(--ink);
+      color: #eef6f5;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .hero-copy {
+      padding: 36px 36px 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .eyebrow {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin: 0 0 12px;
+    }
+    .hero h1 {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.1;
+      margin: 0 0 14px;
+      max-width: 16ch;
+    }
+    .hero p {
+      margin: 0;
+      max-width: 46ch;
+      color: #c8d6e0;
+      font-size: 1.05rem;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .badge {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+    }
+    .badge.orange { border-color: rgba(255,138,61,0.5); color: #ffc39a; }
+    .badge.teal { border-color: rgba(18,179,168,0.5); color: #9aefe8; }
+    .badge.ok { border-color: rgba(47,191,113,0.5); color: #9aefc0; }
+
+    .hero-img {
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero-img img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0.92;
+    }
+
+    .note {
+      background: #fff8f1;
+      border-left: 4px solid var(--orange);
+      padding: 14px 16px;
+      border-radius: 0 12px 12px 0;
+      margin: 0 0 24px;
+      color: var(--ink-soft);
+    }
+
+    section.step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 28px 24px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 18px;
+      animation: rise 0.55s ease both;
+    }
+    section.step:nth-of-type(2) { animation-delay: 0.05s; }
+    section.step:nth-of-type(3) { animation-delay: 0.1s; }
+    section.step:nth-of-type(4) { animation-delay: 0.15s; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .step-head {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .step-num {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--teal), var(--teal-deep));
+      color: white;
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 18px rgba(18, 179, 168, 0.28);
+    }
+    .step-num.dark { background: linear-gradient(145deg, #1a3354, var(--ink)); box-shadow: none; }
+    .step-num.warn { background: linear-gradient(145deg, var(--orange), #d96a24); }
+    .step h2 {
+      margin: 2px 0 4px;
+      font-family: Syne, sans-serif;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+    .step .meta {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      color: #66788c;
+    }
+
+    h3 {
+      font-family: Syne, sans-serif;
+      font-size: 1.05rem;
+      margin: 22px 0 10px;
+    }
+
+    p { margin: 0 0 12px; }
+    ul, ol { margin: 0 0 14px; padding-left: 1.25rem; }
+    li { margin-bottom: 6px; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    figure {
+      margin: 14px 0 18px;
+      background: #f7faf9;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    figure img { width: 100%; }
+    figcaption {
+      padding: 10px 14px 12px;
+      font-size: 0.88rem;
+      color: #516275;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 12px 0 16px;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #eef5f4;
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--ink-soft);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fbfa; }
+
+    pre {
+      background: var(--code-bg);
+      color: #d7e2ef;
+      padding: 14px 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      margin: 10px 0 16px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    code {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.86em;
+      background: rgba(18, 179, 168, 0.1);
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+    pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+    .terminal {
+      background: #0b1220;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 12px 0 18px;
+      border: 1px solid #1c2a40;
+    }
+    .terminal .bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 10px 12px;
+      background: #121b2c;
+      border-bottom: 1px solid #1c2a40;
+    }
+    .terminal .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #3a4a63;
+    }
+    .terminal .dot:nth-child(1) { background: #ff5f57; }
+    .terminal .dot:nth-child(2) { background: #febc2e; }
+    .terminal .dot:nth-child(3) { background: #28c840; }
+    .terminal .title {
+      margin-left: 8px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      color: #7f91a8;
+    }
+    .terminal pre {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+    .terminal .ok { color: #7dffa8; }
+    .terminal .fail { color: #ff8f8f; }
+    .terminal .cmd { color: #9ad7ff; }
+
+    .callout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin: 14px 0;
+      background: #eefaf8;
+      border: 1px solid #bfe8e3;
+    }
+    .callout.warn {
+      background: #fff6ee;
+      border-color: #f0d0b4;
+    }
+    .callout .icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: grid; place-items: center;
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .callout.warn .icon { background: var(--orange); }
+    .callout strong { display: block; margin-bottom: 2px; }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 12px 0 8px;
+    }
+    .pill {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eef5f4;
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+    .pill.teal { background: rgba(18,179,168,0.12); border-color: #9adfd9; }
+    .pill.orange { background: rgba(255,138,61,0.12); border-color: #ffc39a; }
+    .pill.red { background: rgba(214,69,69,0.1); border-color: #f0b0b0; color: #a83232; }
+    .arrow { color: #8aa0b5; font-weight: 700; }
+
+    footer {
+      margin-top: 10px;
+      color: #66788c;
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 20px 8px;
+    }
+
+    .topbar-mobile {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 14px;
+      margin: -28px -20px 18px;
+    }
+    .topbar-mobile select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font: inherit;
+      background: white;
+    }
+
+    .os-bar {
+      position: sticky;
+      top: 12px;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .os-bar .label {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.75rem;
+      color: #66788c;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 4px;
+    }
+    .os-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .os-tabs button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #f7faf9;
+      color: var(--ink-soft);
+      font: 600 0.88rem "IBM Plex Sans", sans-serif;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+    .os-tabs button:hover { border-color: #9adfd9; }
+    .os-tabs button.active {
+      background: var(--ink);
+      color: #eef6f5;
+      border-color: var(--ink);
+    }
+    .os-hint {
+      margin-left: auto;
+      font-size: 0.82rem;
+      color: #66788c;
+    }
+    .os-panel { display: none; }
+    .os-panel.active { display: block; }
+    .os-grid {
+      display: none;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .os-grid.active { display: grid; }
+    @media (min-width: 720px) {
+      .os-grid.triple.active { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .os-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .os-card h4 {
+      margin: 0;
+      padding: 10px 12px;
+      font-family: Syne, sans-serif;
+      font-size: 0.95rem;
+      background: #eef5f4;
+      border-bottom: 1px solid var(--line);
+    }
+    .os-card .terminal { margin: 0; border: 0; border-radius: 0; }
+    kbd {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8em;
+      background: #e8eef2;
+      border: 1px solid #c9d4de;
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      padding: 1px 6px;
+    }
+
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; padding-top: 16px; }
+      nav.toc { display: none; }
+      .topbar-mobile { display: block; }
+      .os-bar { top: 62px; }
+      .os-hint { margin-left: 0; width: 100%; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .hero-copy { padding: 26px 22px 20px; }
+      section.step { padding: 22px 18px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Mục lục">
+      <h2>Các bước</h2>
+      <a href="#overview"><span>○</span> Tổng quan</a>
+      <a href="#b0"><span>0</span> Tạo repo</a>
+      <a href="#b1"><span>1</span> Môi trường</a>
+      <a href="#b2"><span>2</span> Viết 4 module</a>
+      <a href="#b3"><span>3</span> Calibrate</a>
+      <a href="#b4"><span>4</span> Chạy pipeline</a>
+      <a href="#b5"><span>5</span> Báo cáo &amp; nộp</a>
+      <a href="#loi"><span>!</span> Lỗi hay gặp</a>
+    </nav>
+
+    <main>
+      <div class="topbar-mobile">
+        <label for="jump" class="visually-hidden" style="position:absolute;left:-9999px">Nhảy tới bước</label>
+        <select id="jump" onchange="if(this.value) location.hash=this.value">
+          <option value="">Nhảy tới bước…</option>
+          <option value="#overview">Tổng quan</option>
+          <option value="#b0">0 · Tạo repo</option>
+          <option value="#b1">1 · Môi trường</option>
+          <option value="#b2">2 · Viết 4 module</option>
+          <option value="#b3">3 · Calibrate</option>
+          <option value="#b4">4 · Chạy pipeline</option>
+          <option value="#b5">5 · Báo cáo &amp; nộp</option>
+          <option value="#loi">Lỗi hay gặp</option>
+        </select>
+      </div>
+
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">VinUni · K5-L23 · Day 09</p>
+          <h1>AutoQC Pipeline Lab</h1>
+          <p>Hướng dẫn làm bài từ đầu đến cuối bằng hình thật — hỗ trợ <strong>Windows · macOS · Linux</strong>. Chọn hệ điều hành ở thanh bên dưới rồi làm theo từng bước.</p>
+          <div class="badges">
+            <span class="badge">cá nhân</span>
+            <span class="badge orange">~4,5 giờ</span>
+            <span class="badge teal">224 ảnh</span>
+            <span class="badge ok">Win / Mac / Linux</span>
+            <span class="badge ok">không cần GPU (trừ train)</span>
+          </div>
+        </div>
+        <div class="hero-img">
+          <img src="docs/assets/hero.png" alt="Minh họa pipeline kiểm nhãn tự động Day 09" />
+        </div>
+      </header>
+
+      <div class="os-bar" role="group" aria-label="Chọn hệ điều hành">
+        <span class="label">Hệ điều hành</span>
+        <div class="os-tabs">
+          <button type="button" data-os="win" class="active">Windows</button>
+          <button type="button" data-os="mac">macOS</button>
+          <button type="button" data-os="linux">Linux</button>
+        </div>
+        <span class="os-hint" id="osHint">Đang xem lệnh cho Windows (PowerShell)</span>
+      </div>
+
+      <p class="note">
+        File này <strong>không</strong> chứa đáp án code 4 module. Bạn tự viết theo docstring + test.
+        Tham chiếu chính thức: <code>GUIDE.md</code>, <code>RULES.md</code>, <code>RUBRIC.md</code>.
+        Lệnh <code>make …</code> có sẵn trên macOS/Linux; Windows chạy lệnh <code>python …</code> tương đương trong <code>Makefile</code>.
+      </p>
+
+      <!-- OVERVIEW -->
+      <section class="step" id="overview">
+        <div class="step-head">
+          <div class="step-num dark">★</div>
+          <div>
+            <h2>Bạn sẽ làm gì</h2>
+            <div class="meta">nhìn 2 hình là hiểu luồng</div>
+          </div>
+        </div>
+
+        <figure>
+          <img src="docs/assets/pipeline.png" alt="Sơ đồ pipeline một lệnh python -m pipeline.run" />
+          <figcaption>Pipeline chạy bằng <strong>một lệnh</strong>. Cửa chặn: Release (0) · Hold (10) · Rework (20).</figcaption>
+        </figure>
+
+        <figure>
+          <img src="docs/assets/machine_human.png" alt="Phân việc máy và người" />
+          <figcaption>Máy bắt lỗi quy tắc; người quyết lỗi ngữ nghĩa. <code>second_opinion</code> chỉ cảnh báo.</figcaption>
+        </figure>
+
+        <table>
+          <thead>
+            <tr><th>Bước</th><th>Việc</th><th>Thành công khi</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>Tạo repo từ template</td><td>repo public đúng tên</td></tr>
+            <tr><td>1</td><td>Cài môi trường + nhìn dữ liệu</td><td><code>55 failed, 24 passed</code></td></tr>
+            <tr><td>2</td><td>Viết 4 module (TDD)</td><td><code>pytest</code> xanh hết</td></tr>
+            <tr><td>3</td><td>Calibrate 2 ngưỡng</td><td>có <code>calibration/</code> + yaml đã đổi</td></tr>
+            <tr><td>4</td><td>Chạy pipeline (+ Colab tùy chọn)</td><td>đủ <code>reports/</code> + <code>export/</code></td></tr>
+            <tr><td>5</td><td>Viết REPORT + nộp</td><td><code>check-core</code> hết LỖI</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- STEP 0 -->
+      <section class="step" id="b0">
+        <div class="step-head">
+          <div class="step-num">0</div>
+          <div>
+            <h2>Tạo repo của bạn</h2>
+            <div class="meta">~5 phút · GitHub template</div>
+          </div>
+        </div>
+
+        <ol>
+          <li>Mở <a href="https://github.com/VinUni-AI20k/K5-L23-Day09-AutoQC-Pipeline-Lab" target="_blank" rel="noopener">repo mẫu</a></li>
+          <li>Bấm <strong>Use this template</strong> → <strong>Create a new repository</strong></li>
+          <li>Tên: <code>K5-L23-DAY09-&lt;MSHV&gt;-AutoQCPipeline</code> (không dấu)</li>
+          <li>Chọn <strong>Public</strong> → Create</li>
+          <li>Clone về máy, rồi trong Cursor: <strong>File → Open Folder</strong></li>
+        </ol>
+
+        <div class="os-panel active" data-os="win">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · PowerShell</span></div>
+            <pre><code><span class="cmd">cd $HOME\Downloads</span>
+<span class="cmd">git clone https://github.com/&lt;tai-khoan&gt;/&lt;ten-repo&gt;.git</span>
+<span class="cmd">cd &lt;ten-repo&gt;</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="mac">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · Terminal / zsh</span></div>
+            <pre><code><span class="cmd">cd ~/Downloads</span>
+<span class="cmd">git clone https://github.com/&lt;tai-khoan&gt;/&lt;ten-repo&gt;.git</span>
+<span class="cmd">cd &lt;ten-repo&gt;</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="linux">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · bash</span></div>
+            <pre><code><span class="cmd">cd ~/Downloads</span>
+<span class="cmd">git clone https://github.com/&lt;tai-khoan&gt;/&lt;ten-repo&gt;.git</span>
+<span class="cmd">cd &lt;ten-repo&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <pre><code>repo/
+├── GUIDE.md, CHECKPOINTS.md, RUBRIC.md, RULES.md, SUBMISSION.md
+├── configs/pipeline.yaml     ← chỉ sửa 2 dòng # &lt;-- CALIBRATE
+├── pipeline/checks/          ← bạn viết: label_format, second_opinion
+├── pipeline/steps/           ← bạn viết: autofix, gate
+├── tests/                    ← KHÔNG sửa
+├── data/                     ← KHÔNG sửa
+└── submission/REPORT.md      ← điền cuối</code></pre>
+      </section>
+
+      <!-- STEP 1 -->
+      <section class="step" id="b1">
+        <div class="step-head">
+          <div class="step-num">1</div>
+          <div>
+            <h2>Chuẩn bị môi trường + nhìn dữ liệu</h2>
+            <div class="meta">~30 phút · chọn OS ở thanh trên</div>
+          </div>
+        </div>
+
+        <h3>1.1 Cài thư viện</h3>
+        <p>Mở terminal Cursor (<kbd>Ctrl</kbd>+<kbd>`</kbd> trên Win/Linux, <kbd>Ctrl</kbd>+<kbd>`</kbd> hoặc <kbd>Cmd</kbd>+<kbd>`</kbd> trên Mac). Đứng ở thư mục gốc repo. Python cần <strong>3.9–3.13</strong>.</p>
+
+        <div class="os-panel active" data-os="win">
+          <div class="callout warn">
+            <div class="icon">W</div>
+            <div>
+              <strong>Windows</strong>
+              Thường không có <code>make</code> → dùng lệnh <code>python …</code> bên dưới. Nên bật UTF-8. Nếu <code>Activate.ps1</code> bị chặn: <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>.
+            </div>
+          </div>
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · PowerShell</span></div>
+            <pre><code><span class="cmd">$env:PYTHONUTF8 = "1"</span>
+<span class="cmd">python --version</span>
+<span class="cmd">python -m venv .venv</span>
+<span class="cmd">.\.venv\Scripts\Activate.ps1</span>
+<span class="cmd">python -m pip install -r requirements.txt</span></code></pre>
+          </div>
+        </div>
+
+        <div class="os-panel" data-os="mac">
+          <div class="callout">
+            <div class="icon"></div>
+            <div>
+              <strong>macOS</strong>
+              Dùng Terminal/zsh. Có thể gọi <code>python3</code> / <code>pip3</code>. Có <code>make</code> sẵn (Xcode CLT). Nếu chưa có Python: <code>brew install python</code>.
+            </div>
+          </div>
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · zsh</span></div>
+            <pre><code><span class="cmd">export PYTHONUTF8=1</span>
+<span class="cmd">python3 --version</span>
+<span class="cmd">python3 -m venv .venv</span>
+<span class="cmd">source .venv/bin/activate</span>
+<span class="cmd">python -m pip install -r requirements.txt</span></code></pre>
+          </div>
+        </div>
+
+        <div class="os-panel" data-os="linux">
+          <div class="callout">
+            <div class="icon">L</div>
+            <div>
+              <strong>Linux</strong>
+              Dùng bash. Cài sẵn: <code>python3</code>, <code>python3-venv</code>, <code>make</code> (vd. Ubuntu: <code>sudo apt install python3 python3-venv python3-pip make</code>).
+            </div>
+          </div>
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · bash</span></div>
+            <pre><code><span class="cmd">export PYTHONUTF8=1</span>
+<span class="cmd">python3 --version</span>
+<span class="cmd">python3 -m venv .venv</span>
+<span class="cmd">source .venv/bin/activate</span>
+<span class="cmd">python -m pip install -r requirements.txt</span></code></pre>
+          </div>
+        </div>
+
+        <h3>1.2 Pytest lần đầu — phải đỏ</h3>
+        <div class="terminal">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">python -m pytest -q</span></div>
+          <pre><code><span class="fail">55 failed</span>, <span class="ok">24 passed</span> in 49.13s</code></pre>
+        </div>
+        <div class="callout">
+          <div class="icon">✓</div>
+          <div>
+            <strong>Đây là output thật đã chạy trên máy lab này</strong>
+            24 test xanh = 5 check mẫu. 55 đỏ = 4 module bạn chưa viết. Nếu đã xanh hết từ đầu → nghi nhầm repo / có code sẵn.
+          </div>
+        </div>
+
+        <h3>1.3 Dữ liệu là gì?</h3>
+        <table>
+          <thead><tr><th>Thư mục</th><th>Ảnh</th><th>Dùng để</th></tr></thead>
+          <tbody>
+            <tr><td><code>data/raw/</code></td><td>224 ảnh · 218 nhãn</td><td>đầu vào QC</td></tr>
+            <tr><td><code>data/calib/</code></td><td>39</td><td>có đáp án → calibrate</td></tr>
+            <tr><td><code>data/gold_val/</code></td><td>40</td><td>val khi train</td></tr>
+            <tr><td><code>data/test/</code></td><td>100</td><td>chỉ đo cuối — không dùng sửa/chọn ngưỡng</td></tr>
+          </tbody>
+        </table>
+
+        <figure>
+          <img src="docs/assets/sample_grid.jpg" alt="Lưới mẫu ảnh đã gán nhãn" />
+          <figcaption>Mẫu ảnh COCO val2017 với bounding box (từ đề lab).</figcaption>
+        </figure>
+
+        <h3>1.4 Vẽ nhãn lên ảnh raw</h3>
+        <div class="terminal">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">viz</span></div>
+          <pre><code><span class="cmd">python scripts/viz_labels.py img_0001 img_0030 img_0008 img_0041</span>
+đã vẽ 4 ảnh vào work/viz/</code></pre>
+        </div>
+
+        <div class="grid-2">
+          <figure>
+            <img src="docs/guide_shots/img_0001.png" alt="img_0001 với box person trùng" />
+            <figcaption><strong>img_0001</strong> — 2 box person gần trùng trên cùng người (= kiểu <code>DUP_BOX</code>); người lính thiếu box.</figcaption>
+          </figure>
+          <figure>
+            <img src="docs/guide_shots/img_0030.png" alt="img_0030 nhiều person" />
+            <figcaption><strong>img_0030</strong> — nhiều person, box dày; ghi 3 lỗi mắt thấy cho REPORT mục 4.</figcaption>
+          </figure>
+        </div>
+
+        <p>File nhãn <code>img_0001.txt</code> thật sự có 2 dòng gần giống:</p>
+        <pre><code>1 0.316889 0.587689 0.390466 0.804366
+1 0.955851 0.836215 0.087397 0.323209
+1 0.316034 0.587239 0.391218 0.803514</code></pre>
+
+        <div class="callout warn">
+          <div class="icon">!</div>
+          <div>
+            <strong>Trước khi viết code</strong>
+            Đọc 5 check mẫu trong <code>pipeline/checks/</code>: <code>missing_labels</code>, <code>class_names</code>, <code>images</code>, <code>duplicates</code>, <code>stats</code>. Copy style <code>Issue(...)</code> của chúng.
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" id="b2">
+        <div class="step-head">
+          <div class="step-num warn">2</div>
+          <div>
+            <h2>Viết 4 module (TDD)</h2>
+            <div class="meta">~2 giờ 15' · phần nặng điểm nhất (40đ)</div>
+          </div>
+        </div>
+
+        <div class="flow">
+          <span class="pill teal">1 label_format</span>
+          <span class="arrow">→</span>
+          <span class="pill teal">2 gate</span>
+          <span class="arrow">→</span>
+          <span class="pill orange">3 autofix</span>
+          <span class="arrow">→</span>
+          <span class="pill red">4 second_opinion</span>
+        </div>
+
+        <p>Vòng lặp mỗi module: đọc docstring → đọc test → viết → chạy pytest file đó → sửa → commit.</p>
+
+        <table>
+          <thead><tr><th>#</th><th>File</th><th>Lệnh kiểm</th><th>~tg</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><code>pipeline/checks/label_format.py</code></td>
+              <td><code>python -m pytest tests/test_label_format.py -q</code></td>
+              <td>30'</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><code>pipeline/steps/gate.py</code></td>
+              <td><code>python -m pytest tests/test_gate.py -q</code></td>
+              <td>15'</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><code>pipeline/steps/autofix.py</code></td>
+              <td><code>python -m pytest tests/test_autofix.py -q</code></td>
+              <td>35'</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><code>pipeline/checks/second_opinion.py</code></td>
+              <td><code>python -m pytest tests/test_second_opinion.py -q</code></td>
+              <td>55'</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Chỗ “ra sao” từng file</h3>
+        <ul>
+          <li><strong>label_format</strong> — duyệt từng dòng YOLO <code>id cx cy w h</code>; dùng <code>parse_yolo_line</code> + <code>iou_xywh</code>; ngưỡng từ <code>cfg["label_format"]</code>.</li>
+          <li><strong>gate</strong> — còn ERROR → Rework; tỉ lệ ảnh còn WARN ≥ 10% → Hold; else Release. Ảnh đã <code>reviewed</code> bỏ WARN nhưng <strong>không</strong> bỏ ERROR.</li>
+          <li><strong>autofix</strong> — sửa ERROR an toàn + trả list dict cho <code>03_fixes.csv</code>. Gom theo file; không bịa nhãn cho <code>MISSING_LABEL_FILE</code>.</li>
+          <li><strong>second_opinion</strong> — so với preds cache (không cần GPU); chỉ WARN. Thuật toán nằm trong docstring — làm đúng nhánh.</li>
+        </ul>
+
+        <div class="terminal">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">chung · mọi OS</span></div>
+          <pre><code><span class="cmd">python -m pytest -q</span>
+<span class="ok">... passed</span>   <span class="fail"># kỳ vọng ~79 test xanh</span></code></pre>
+        </div>
+
+        <div class="os-panel active" data-os="win">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · thử pipeline</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run</span>
+<span class="cmd">echo $LASTEXITCODE</span>
+<span class="fail"># 0 Release · 10 Hold · 20 Rework</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="mac">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · thử pipeline</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run</span>
+<span class="cmd">echo $?</span>
+<span class="fail"># 0 Release · 10 Hold · 20 Rework · hoặc: make run</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="linux">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · thử pipeline</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run</span>
+<span class="cmd">echo $?</span>
+<span class="fail"># 0 Release · 10 Hold · 20 Rework · hoặc: make run</span></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step" id="b3">
+        <div class="step-head">
+          <div class="step-num">3</div>
+          <div>
+            <h2>Calibrate 2 ngưỡng</h2>
+            <div class="meta">~30 phút · chỉ sửa 2 dòng yaml</div>
+          </div>
+        </div>
+
+        <p>Trong <code>configs/pipeline.yaml</code> chỉ đổi dòng có <code># &lt;-- CALIBRATE</code>:</p>
+        <pre><code>duplicates:
+  phash_dist: 2            # &lt;-- CALIBRATE
+
+second_opinion:
+  conf: 0.25               # &lt;-- CALIBRATE</code></pre>
+
+        <div class="os-panel active" data-os="win">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · calibrate (PowerShell dùng `)</span></div>
+            <pre><code><span class="cmd">python -m pipeline.calibrate `
+  --sweep duplicates.phash_dist=2,4,6,8,10,12,14,16,20 `
+  --sweep second_opinion.conf=0.1,0.25,0.4,0.5,0.6,0.7,0.8 `
+  --out submission/calibration</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="mac">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · make calibrate hoặc lệnh dài</span></div>
+            <pre><code><span class="cmd">make calibrate</span>
+<span class="fail"># tương đương:</span>
+<span class="cmd">python -m pipeline.calibrate \
+  --sweep duplicates.phash_dist=2,4,6,8,10,12,14,16,20 \
+  --sweep second_opinion.conf=0.1,0.25,0.4,0.5,0.6,0.7,0.8 \
+  --out submission/calibration</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="linux">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · make calibrate hoặc lệnh dài</span></div>
+            <pre><code><span class="cmd">make calibrate</span>
+<span class="fail"># tương đương:</span>
+<span class="cmd">python -m pipeline.calibrate \
+  --sweep duplicates.phash_dist=2,4,6,8,10,12,14,16,20 \
+  --sweep second_opinion.conf=0.1,0.25,0.4,0.5,0.6,0.7,0.8 \
+  --out submission/calibration</span></code></pre>
+          </div>
+        </div>
+
+        <p>Mở <code>submission/calibration/calibration_report.md</code> — mỗi ô là <code>precision / recall / F1</code>.</p>
+        <ul>
+          <li><code>phash_dist</code>: ưu tiên precision cao (FP = xoá nhầm ảnh tốt).</li>
+          <li><code>second_opinion.conf</code>: cân recall vs hàng đợi 80 ảnh; quá nhiều WARN → dễ Hold.</li>
+          <li>Calib chỉ 39 ảnh → sau khi chọn, mở xem vài cặp “trùng” trên raw.</li>
+        </ul>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="step" id="b4">
+        <div class="step-head">
+          <div class="step-num">4</div>
+          <div>
+            <h2>Chạy pipeline (+ train tùy chọn)</h2>
+            <div class="meta">~20 phút (+ Colab ~35' nếu làm)</div>
+          </div>
+        </div>
+
+        <div class="os-panel active" data-os="win">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · run</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run</span>
+<span class="cmd">echo $LASTEXITCODE</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="mac">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · make run</span></div>
+            <pre><code><span class="cmd">make run</span>
+<span class="fail"># hoặc:</span>
+<span class="cmd">python -m pipeline.run; echo $?</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="linux">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · make run</span></div>
+            <pre><code><span class="cmd">make run</span>
+<span class="fail"># hoặc:</span>
+<span class="cmd">python -m pipeline.run; echo $?</span></code></pre>
+          </div>
+        </div>
+
+        <table>
+          <thead><tr><th>File trong submission/reports/</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><code>01_intake.*</code></td><td>ảnh loại ở cửa vào</td></tr>
+            <tr><td><code>02_error_list_v1.*</code></td><td><strong>lỗi TRƯỚC sửa</strong> → bảng REPORT mục 2</td></tr>
+            <tr><td><code>03_fixes.csv</code></td><td>máy sửa gì (before → after)</td></tr>
+            <tr><td><code>04_… · 05_review_queue · 06_review_log</code></td><td>sau sửa · hàng đợi · đã duyệt (≤80)</td></tr>
+            <tr><td><code>07_error_list_v3.*</code></td><td>sau duyệt + <strong>kết luận</strong></td></tr>
+            <tr><td><code>08_summary.json</code></td><td>tóm tắt số liệu</td></tr>
+          </tbody>
+        </table>
+
+        <div class="flow">
+          <span class="pill teal">Release · xuất</span>
+          <span class="pill orange">Hold · xuất bản nháp</span>
+          <span class="pill red">Rework · KHÔNG xuất</span>
+        </div>
+
+        <h3>Train Colab (tùy chọn, 15 điểm riêng)</h3>
+        <p>Không làm vẫn nộp được (tối đa 85). Ghi “chưa chạy” ở REPORT mục 5 + dùng <code>check-core</code>.</p>
+        <ol>
+          <li>Commit/push <code>submission/export/clean_v1/</code> (repo public)</li>
+          <li>Mở notebook theo <code>docs/COLAB.md</code> — runtime <strong>T4</strong></li>
+          <li>Điền <code>REPO_URL</code> → Run all</li>
+          <li>Tải <code>results/</code> về → <code>python scripts/summarize_results.py</code></li>
+        </ol>
+      </section>
+
+      <!-- STEP 5 -->
+      <section class="step" id="b5">
+        <div class="step-head">
+          <div class="step-num">5</div>
+          <div>
+            <h2>Báo cáo và nộp</h2>
+            <div class="meta">~45 phút · REPORT.md 6 mục</div>
+          </div>
+        </div>
+
+        <ol>
+          <li>Điền <code>submission/REPORT.md</code> — xoá hết <code>TODO(học viên)</code></li>
+          <li>Chứng minh gate (Rework khi không có người duyệt):</li>
+        </ol>
+
+        <div class="os-panel active" data-os="win">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Windows · chứng minh gate + check</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run --budget 0 --reports work/rep_nb --export-dir work/exp_nb</span>
+<span class="cmd">echo $LASTEXITCODE</span>
+<span class="fail"># kỳ vọng 20 = Rework</span>
+
+<span class="cmd">python scripts/check_submission.py --no-train</span>
+<span class="fail"># = make check-core · sửa hết dòng LỖI</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="mac">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">macOS · chứng minh gate + check</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run --budget 0 --reports work/rep_nb --export-dir work/exp_nb</span>
+<span class="cmd">echo $?</span>
+<span class="fail"># kỳ vọng 20 = Rework</span>
+
+<span class="cmd">make check-core</span>
+<span class="fail"># hoặc: python scripts/check_submission.py --no-train</span></code></pre>
+          </div>
+        </div>
+        <div class="os-panel" data-os="linux">
+          <div class="terminal">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">Linux · chứng minh gate + check</span></div>
+            <pre><code><span class="cmd">python -m pipeline.run --budget 0 --reports work/rep_nb --export-dir work/exp_nb</span>
+<span class="cmd">echo $?</span>
+<span class="fail"># kỳ vọng 20 = Rework</span>
+
+<span class="cmd">make check-core</span>
+<span class="fail"># hoặc: python scripts/check_submission.py --no-train</span></code></pre>
+          </div>
+        </div>
+
+        <p>Đổi dòng 1 <code>README.md</code>:</p>
+        <pre><code># Day 09 Lab — &lt;Họ và tên&gt;: &lt;MSHV&gt; - &lt;Họ và tên&gt;</code></pre>
+        <p>Nộp link repo lên LMS: <a href="https://aithucchien.vinuni.edu.vn" target="_blank" rel="noopener">aithucchien.vinuni.edu.vn</a></p>
+
+        <h3>Rubric nhanh</h3>
+        <table>
+          <thead><tr><th>Hạng mục</th><th>Điểm</th></tr></thead>
+          <tbody>
+            <tr><td>4 module (pytest)</td><td>40</td></tr>
+            <tr><td>Pipeline một lệnh</td><td>15</td></tr>
+            <tr><td>Calibration</td><td>10</td></tr>
+            <tr><td>Báo cáo / quyết định</td><td>15</td></tr>
+            <tr><td>Train raw vs clean (tùy chọn)</td><td>15</td></tr>
+            <tr><td>Git / tái lập</td><td>5</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ERRORS -->
+      <section class="step" id="loi">
+        <div class="step-head">
+          <div class="step-num dark">!</div>
+          <div>
+            <h2>Lỗi hay gặp (3 hệ điều hành)</h2>
+            <div class="meta">chung + riêng theo OS đang chọn</div>
+          </div>
+        </div>
+
+        <table>
+          <thead><tr><th>Triệu chứng</th><th>Cách xử lý</th></tr></thead>
+          <tbody>
+            <tr><td><code>ModuleNotFoundError: imagehash</code></td><td><code>python -m pip install -r requirements.txt</code> (trong venv đã activate)</td></tr>
+            <tr><td><code>NotImplementedError</code></td><td>còn stub — <code>python -m pytest -q</code> xem file đỏ</td></tr>
+            <tr><td>Quá nhiều ảnh bị loại</td><td><code>phash_dist</code> quá lớn → calibrate lại</td></tr>
+            <tr><td>Ra Hold sau calibrate</td><td>≥10% ảnh còn WARN chưa duyệt — báo Hold trung thực vẫn được điểm</td></tr>
+            <tr><td>Colab thiếu <code>manifest.json</code></td><td>chưa push <code>submission/export/clean_v1/</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="os-panel active" data-os="win">
+          <h3>Riêng Windows</h3>
+          <table>
+            <thead><tr><th>Triệu chứng</th><th>Cách xử lý</th></tr></thead>
+            <tbody>
+              <tr><td><code>make</code> không có</td><td>chạy lệnh <code>python …</code> trong <code>Makefile</code></td></tr>
+              <tr><td>Unicode / font tiếng Việt lỗi</td><td><code>$env:PYTHONUTF8 = "1"</code></td></tr>
+              <tr><td><code>Activate.ps1</code> bị chặn</td><td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code></td></tr>
+              <tr><td><code>python</code> không tìm thấy</td><td>cài từ python.org (tick “Add to PATH”) hoặc dùng <code>py -3</code></td></tr>
+              <tr><td>Muốn dùng <code>make</code></td><td>Git Bash / WSL, hoặc cài make riêng</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="os-panel" data-os="mac">
+          <h3>Riêng macOS</h3>
+          <table>
+            <thead><tr><th>Triệu chứng</th><th>Cách xử lý</th></tr></thead>
+            <tbody>
+              <tr><td><code>python</code> không có, chỉ <code>python3</code></td><td>dùng <code>python3</code> / sau khi <code>source .venv/bin/activate</code> thì gọi <code>python</code></td></tr>
+              <tr><td><code>xcrun</code> / thiếu compiler</td><td><code>xcode-select --install</code></td></tr>
+              <tr><td><code>make: command not found</code></td><td>cài Xcode Command Line Tools; hoặc chạy thẳng <code>python -m …</code></td></tr>
+              <tr><td>Homebrew Python</td><td><code>brew install python</code> rồi tạo lại <code>.venv</code></td></tr>
+              <tr><td>Permission khi pip</td><td>luôn dùng venv — đừng <code>sudo pip</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="os-panel" data-os="linux">
+          <h3>Riêng Linux</h3>
+          <table>
+            <thead><tr><th>Triệu chứng</th><th>Cách xử lý</th></tr></thead>
+            <tbody>
+              <tr><td>Thiếu <code>venv</code> / <code>pip</code></td><td>Ubuntu/Debian: <code>sudo apt install python3-venv python3-pip</code></td></tr>
+              <tr><td>Thiếu <code>make</code></td><td><code>sudo apt install make</code> (hoặc chạy lệnh <code>python</code> trong Makefile)</td></tr>
+              <tr><td><code>externally-managed-environment</code></td><td>bắt buộc dùng <code>python3 -m venv .venv</code> rồi activate</td></tr>
+              <tr><td>Thiếu lib ảnh (hiếm)</td><td><code>sudo apt install libjpeg-dev zlib1g-dev</code> rồi pip lại</td></tr>
+              <tr><td>Lệnh <code>python</code> trỏ Python 2</td><td>dùng <code>python3</code> hoặc alias trong venv</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <div class="icon">⏱</div>
+          <div>
+            <strong>Chia 2 buổi</strong>
+            Buổi 1: bước 0–2 (module xanh). Buổi 2: calibrate + run + REPORT. Colab để buổi khác nếu muốn đủ 100 điểm.
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Ảnh <code>docs/guide_shots/</code> sinh bằng <code>viz_labels.py</code> trên lô raw · sơ đồ từ <code>docs/assets/</code>.<br />
+        Mở file này bằng trình duyệt (Chrome / Edge / Safari / Firefox). Chọn OS ở thanh dính phía trên.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const links = [...document.querySelectorAll("nav.toc a")];
+    const sections = links.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id));
+      });
+    }, { rootMargin: "-20% 0px -65% 0px", threshold: 0.01 });
+    sections.forEach(s => io.observe(s));
+
+    const hints = {
+      win: "Đang xem lệnh cho Windows (PowerShell)",
+      mac: "Đang xem lệnh cho macOS (Terminal / zsh)",
+      linux: "Đang xem lệnh cho Linux (bash)"
+    };
+
+    function detectOs() {
+      const ua = navigator.userAgent || "";
+      const plat = navigator.platform || "";
+      if (/Win/i.test(plat) || /Windows/i.test(ua)) return "win";
+      if (/Mac/i.test(plat) || /Mac OS/i.test(ua)) return "mac";
+      if (/Linux/i.test(plat) || /Linux/i.test(ua)) return "linux";
+      return "win";
+    }
+
+    function setOs(os) {
+      document.querySelectorAll(".os-tabs button").forEach(b => {
+        b.classList.toggle("active", b.dataset.os === os);
+      });
+      document.querySelectorAll(".os-panel").forEach(p => {
+        p.classList.toggle("active", p.dataset.os === os);
+      });
+      const hint = document.getElementById("osHint");
+      if (hint) hint.textContent = hints[os] || "";
+      try { localStorage.setItem("day09-os", os); } catch (_) {}
+    }
+
+    document.querySelectorAll(".os-tabs button").forEach(btn => {
+      btn.addEventListener("click", () => setOs(btn.dataset.os));
+    });
+
+    let initial = "win";
+    try { initial = localStorage.getItem("day09-os") || detectOs(); } catch (_) { initial = detectOs(); }
+    setOs(initial);
+  </script>
+</body>
+</html>
