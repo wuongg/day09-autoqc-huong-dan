@@ -536,7 +536,6 @@
       <a href="#b2"><span>2</span> Viết 4 module</a>
       <a href="#b3"><span>3</span> Calibrate</a>
       <a href="#b4"><span>4</span> Chạy pipeline</a>
-      <a href="#cvat"><span>+</span> CVAT (thưởng)</a>
       <a href="#b5"><span>5</span> Báo cáo &amp; nộp</a>
       <a href="#loi"><span>!</span> Lỗi hay gặp</a>
     </nav>
@@ -552,7 +551,6 @@
           <option value="#b2">2 · Viết 4 module</option>
           <option value="#b3">3 · Calibrate</option>
           <option value="#b4">4 · Chạy pipeline</option>
-          <option value="#cvat">+ · CVAT (thưởng +2)</option>
           <option value="#b5">5 · Báo cáo &amp; nộp</option>
           <option value="#loi">Lỗi hay gặp</option>
         </select>
@@ -622,7 +620,6 @@
             <tr><td>2</td><td>Viết 4 module (TDD)</td><td><code>pytest</code> xanh hết</td></tr>
             <tr><td>3</td><td>Calibrate 2 ngưỡng</td><td>có <code>calibration/</code> + yaml đã đổi</td></tr>
             <tr><td>4</td><td>Chạy pipeline (+ Colab tùy chọn)</td><td>đủ <code>reports/</code> + <code>export/</code></td></tr>
-            <tr><td>+</td><td>CVAT lọc box nhỏ (thưởng +2, tùy chọn)</td><td>lọc <code>width &lt; 20</code> + ghi REPORT mục 6</td></tr>
             <tr><td>5</td><td>Viết REPORT + nộp</td><td><code>check-core</code> hết LỖI</td></tr>
           </tbody>
         </table>
@@ -787,9 +784,8 @@
               <li><code>data/raw/</code> có <strong>224 ảnh</strong> — đó là cả lô; <strong>không</strong> cần vẽ hết.</li>
               <li>Đề bảo mở khoảng <strong>~10 ảnh</strong> đã vẽ nhãn (<code>GUIDE.md</code>).</li>
               <li>Bạn chỉ vẽ đúng những tên ghi sau lệnh; mỗi tên → 1 file <code>.png</code>.</li>
-              <li><strong>Xuất ra:</strong> thư mục <code>work/viz/</code> (file <code>.png</code> xem local — <strong>không phải CVAT</strong>).</li>
-              <li>Mục đích: nhìn lỗi bằng mắt, ghi <strong>3 lỗi</strong> vào nháp → dùng cho <code>REPORT.md</code> mục 4. Chưa phải xuất dataset sạch.</li>
-              <li><strong>CVAT</strong> là bước thưởng riêng (+2), làm <em>sau</em> khi chạy pipeline — xem mục <a href="#cvat">CVAT</a>.</li>
+              <li><strong>Xuất ra:</strong> thư mục <code>work/viz/</code> (file <code>.png</code> chỉ để mở xem — không nộp).</li>
+              <li>Mục đích: chọn vài ảnh nhìn bằng mắt, ghi <strong>3 lỗi</strong> vào nháp → dùng cho <code>REPORT.md</code> mục 4. Chưa phải xuất dataset sạch.</li>
             </ul>
           </div>
         </div>
@@ -1020,10 +1016,9 @@ second_opinion:
           <div>
             <strong>Đừng nhầm thư mục xuất</strong>
             <ul style="margin:8px 0 0;padding-left:1.2rem">
-              <li><code>work/viz/</code> = ảnh PNG vẽ nhãn để nhìn (Bước 1) — không nộp, <strong>không phải CVAT</strong></li>
+              <li><code>work/viz/</code> = ảnh PNG vẽ nhãn để nhìn (Bước 1) — không nộp</li>
               <li><code>submission/reports/</code> = báo cáo lỗi sau <code>pipeline.run</code></li>
               <li><code>submission/export/clean_v1/</code> = dataset sạch (Release/Hold). Rework thì thường <strong>không</strong> xuất</li>
-              <li><code>work/cvat_yolo11.zip</code> = zip nhãn YOLO 1.1 để <strong>import vào CVAT</strong> (mục thưởng)</li>
             </ul>
           </div>
         </div>
@@ -1078,123 +1073,6 @@ second_opinion:
           <li>Điền <code>REPO_URL</code> → Run all</li>
           <li>Tải <code>results/</code> về → <code>python scripts/summarize_results.py</code></li>
         </ol>
-      </section>
-
-      <!-- CVAT OPTIONAL -->
-      <section class="step" id="cvat">
-        <div class="step-head">
-          <div class="step-num warn">+</div>
-          <div>
-            <h2>CVAT local — lọc box nhỏ (TÙY CHỌN, thưởng +2)</h2>
-            <div class="meta">Máy bạn: Docker CVAT · http://localhost:8080 · ảnh chụp thật bên dưới</div>
-          </div>
-        </div>
-
-        <div class="callout warn">
-          <div class="icon">!</div>
-          <div>
-            <strong>Đọc trước — dễ nhầm nhất</strong>
-            <table style="margin:10px 0 0;width:100%">
-              <thead><tr><th>Việc</th><th>Công cụ</th><th>Ra đâu</th></tr></thead>
-              <tbody>
-                <tr><td>Nhìn nhãn local</td><td><code>viz_labels.py</code></td><td><code>work/viz/*.png</code> — <strong>không phải CVAT</strong></td></tr>
-                <tr><td>Pipeline</td><td><code>pipeline.run</code></td><td><code>submission/reports/</code>, <code>export/</code></td></tr>
-                <tr><td>Sửa/lọc tay</td><td><strong>CVAT local</strong></td><td><a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></td></tr>
-              </tbody>
-            </table>
-            <p style="margin:10px 0 0"><strong>Định dạng quan trọng:</strong></p>
-            <ul style="margin:6px 0 0;padding-left:1.2rem">
-              <li><strong>Đưa nhãn VÀO CVAT</strong> = <code>Actions → Upload annotations</code> → chọn format <strong>YOLO 1.1</strong> → file <code>work/cvat_yolo11.zip</code></li>
-              <li><strong>Lấy nhãn RA khỏi CVAT</strong> = <code>Actions → Export task dataset</code> → chọn format <strong>YOLO 1.1</strong> (sau khi lọc/sửa)</li>
-              <li>Không dùng “CVAT for images 1.1” cho lab này (đó là XML của CVAT, không phải YOLO đề yêu cầu)</li>
-            </ul>
-          </div>
-        </div>
-
-        <h3>C0 — Mở CVAT local</h3>
-        <ol>
-          <li>Bật Docker Desktop (máy bạn đã có container <code>cvat_server</code>, <code>cvat_ui</code>, cổng <strong>8080</strong>)</li>
-          <li>Trình duyệt mở: <a href="http://localhost:8080" target="_blank" rel="noopener"><strong>http://localhost:8080</strong></a></li>
-          <li>Đăng nhập (mặc định docker lab này): user <code>admin</code> / pass <code>admin</code></li>
-        </ol>
-        <figure>
-          <img src="docs/guide_shots/cvat/01_tasks.png" alt="CVAT local Tasks page" />
-          <figcaption>CVAT local sau khi đăng nhập — trang <strong>Tasks</strong> tại <code>localhost:8080/tasks</code> (ảnh chụp thật trên máy bạn).</figcaption>
-        </figure>
-
-        <h3>C1 — Chuẩn bị zip YOLO 1.1 (TRƯỚC khi upload)</h3>
-        <p>Chỉ làm sau khi <code>python -m pipeline.run</code> xong (có <code>work/run/ds/</code> + <code>05_review_queue.csv</code>). Đóng ~20 ảnh đầu hàng đợi:</p>
-        <div class="terminal">
-          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">pack YOLO 1.1</span></div>
-          <pre><code><span class="cmd">python scripts/pack_cvat_yolo.py --top 20 --out work/cvat_yolo11.zip</span>
-đã đóng 20 ảnh → work/cvat_yolo11.zip</code></pre>
-        </div>
-        <pre><code>work/cvat_yolo11.zip     ← đây là file UPLOAD vào CVAT (format YOLO 1.1)
-├── obj.data
-├── obj.names              # car / person / truck / bus
-├── train.txt
-└── obj_train_data/
-    ├── img_xxxx.jpg
-    └── img_xxxx.txt</code></pre>
-
-        <h3>C2 — Tạo Project + dán labels</h3>
-        <figure>
-          <img src="docs/guide_shots/cvat/02_projects.png" alt="CVAT Projects" />
-          <figcaption>Menu <strong>Projects</strong> — bấm nút <strong>+</strong> (góc phải) để tạo project mới.</figcaption>
-        </figure>
-        <figure>
-          <img src="docs/guide_shots/cvat/04_create_project.png" alt="Create project Raw labels" />
-          <figcaption><strong>Create a new project</strong> → Name (vd. <code>Day09-AutoQC-raw</code>) → tab <strong>Raw</strong> → dán nội dung <code>cvat/labels.json</code> → Save → Submit &amp; Open.</figcaption>
-        </figure>
-        <div class="callout warn">
-          <div class="icon">!</div>
-          <div>
-            <strong>Lỗi hay gặp trên CVAT local</strong>
-            Nếu báo <code>attribute values must be a non-empty array</code>: trong JSON, đổi mỗi <code>"values": []</code> của <code>can_review</code> thành <code>"values": ["false", "true"]</code> rồi Save lại. (Bản Docker của bạn validate chặt hơn file mẫu đề.)
-          </div>
-        </div>
-
-        <h3>C3 — Tạo Task: upload ẢNH trước, rồi Upload annotations YOLO 1.1</h3>
-        <ol>
-          <li>Trong project: <strong>Create new task</strong> → Name: <code>review-top20</code></li>
-          <li><strong>Select files</strong>: chọn ~20 ảnh (stem trùng hàng đợi) từ <code>work/run/ds/images/</code> → Submit</li>
-          <li>Mở task vừa tạo → nút <strong>Actions</strong> (góc phải):</li>
-        </ol>
-        <figure>
-          <img src="docs/guide_shots/cvat/07_actions_menu.png" alt="CVAT Actions menu Upload and Export" />
-          <figcaption>Trong task: <strong>Actions</strong> có <em>Upload annotations</em> (đưa nhãn vào) và <em>Export task dataset</em> (xuất nhãn ra).</figcaption>
-        </figure>
-        <ol start="4">
-          <li>Chọn <strong>Upload annotations</strong> → format <strong>YOLO 1.1</strong> → chọn file <code>work/cvat_yolo11.zip</code></li>
-          <li>Đợi xong → mở <strong>Job</strong> → sẽ thấy bounding box trên ảnh</li>
-        </ol>
-
-        <h3>C4 — Lọc box nhỏ</h3>
-        <ol>
-          <li>Trong Job → panel <strong>Filters</strong> → Add rule: <code>width &lt; 20</code> (hoặc <code>height &lt; 20</code>)</li>
-          <li>Thử thêm: <code>label=="truck"</code>, <code>attr["can_review"]==true</code></li>
-          <li>Phím <kbd>→</kbd>/<kbd>←</kbd> nhảy ảnh khớp lọc · <kbd>Tab</kbd> object · <kbd>Del</kbd> xoá 1 box</li>
-          <li>Trước xoá hàng loạt (<kbd>Ctrl</kbd>+<kbd>E</kbd>): đếm box → <kbd>Ctrl</kbd>+<kbd>S</kbd></li>
-        </ol>
-
-        <h3>C5 — Xuất ra (sau khi lọc) + ghi REPORT</h3>
-        <figure>
-          <img src="docs/guide_shots/cvat/08_export_dialog.png" alt="Export task as dataset dialog" />
-          <figcaption>Actions → <strong>Export task dataset</strong>. Đổi <em>Export format</em> từ mặc định “CVAT for images 1.1” sang <strong>YOLO 1.1</strong> rồi OK. (Ảnh chụp dialog thật trên CVAT local.)</figcaption>
-        </figure>
-        <ol>
-          <li>Export format = <strong>YOLO 1.1</strong> (không để mặc định CVAT XML)</li>
-          <li>So với pipeline: mã <code>BOX_TINY</code> dùng ngưỡng <strong>12 px</strong>; CVAT lọc <strong>20 px</strong> → số box có thể khác</li>
-          <li>Ghi <code>REPORT.md</code> mục 6: tên ảnh, số box khớp, 12 vs 20, 1 câu về <code>can_review</code> + kèm ảnh chụp filter</li>
-        </ol>
-
-        <div class="callout">
-          <div class="icon">✓</div>
-          <div>
-            <strong>Thưởng +2 tối thiểu</strong>
-            C2–C4 với ≥ 1 ảnh, lọc <code>width &lt; 20</code>, ghi REPORT. Không làm vẫn nộp bình thường.
-          </div>
-        </div>
       </section>
 
       <!-- STEP 5 -->
